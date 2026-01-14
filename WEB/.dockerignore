@@ -1,0 +1,20 @@
+# Bỏ qua folder môi trường ảo (tên venv hoặc env tùy máy bạn)
+venv/
+env/
+.venv/
+
+# Bỏ qua file quản lý phiên bản (Git)
+.git/
+.gitignore
+
+# Bỏ qua các file rác của Python (pyc)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Bỏ qua file cấu hình biến môi trường (Docker tự đọc, không cần copy vào trong ảnh để bảo mật)
+.env
+
+# Bỏ qua thư mục Database MySQL của Docker (nếu nó lỡ được tạo ra ở đây)
+mysql_data/

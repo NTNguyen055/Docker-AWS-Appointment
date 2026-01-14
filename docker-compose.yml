@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  web:
+    # 1. Chỉ đường dẫn vào folder WEB để tìm Dockerfile
+    build: ./WEB
+    
+    container_name: django_app
+    command: bash -c "sleep 30 && python manage.py migrate && gunicorn --bind 0.0.0.0:8000 hospital.wsgi:application"
+    
+    # 2. Map code từ folder WEB vào trong container
+    volumes:
+      - ./WEB:/app
+      
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file:
+      - .env
+
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'appointment_db'
+      MYSQL_ROOT_PASSWORD: 'Banhmi4o@'
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # (Tùy chọn) Tự động nạp file SQL trong folder DB nếu database rỗng
+      - ./DB:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: 'Banhmi4o@'
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:
